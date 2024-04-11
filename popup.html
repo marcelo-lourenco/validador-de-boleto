@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Marcelo Lourenço">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Dados</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="shortcut icon" href="icons/favicon.ico">
+</head>
+
+<body>
+  <div class="container">
+    <div class="field-container">
+      <h1 class="page-title" id="pageTitle">
+        Validador de Boleto
+      </h1>
+
+    </div>
+    <span class="tooltip" style="display: none;">Copiado</span>
+    <div class="field-container">
+      <input type="text" id="codigo" class="input-insert" maxlength="60" placeholder=""
+        value="34191.75124 34567.871230 41234.560005 4 96800000026035">
+      <label for="codigo" class="fld-label">Insira o 'CÓDIGO DE BARRAS' ou a 'LINHA DIGITÁVEL'</label>
+      <div class="contador-container">
+        <span id="fldContador">0</span>
+      </div>
+      <div class="icon-container" id="iconContainer"></div>
+
+    </div>
+    <div class="field-container">
+      <button type="button" id="btnValidar" class="">Validar</button>
+    </div>
+
+    <div id="result-message" class="field-container div-result">
+      <span id="mensagem" class="message-format ln"></span>
+    </div>
+    <div id="result" class="div-result">
+
+      <div class="group-container">
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="tipoCodigoInput" class="fld-result">
+            <label for="tipoCodigoInput" class="fld-label">Tipo Informado</label>
+          </div>
+        </div>
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="tipoBoleto" class="fld-result">
+            <label for="tipoBoleto" class="fld-label">Tipo de Boleto</label>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="group-container">
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="vencimento" class="fld-result">
+            <label for="vencimento" class="fld-label">Vencimento</label>
+          </div>
+        </div>
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="valor" class="fld-result ">
+            <label for="valor" class="fld-label">Valor</label>
+          </div>
+
+        </div>
+      </div>
+      <div class="group-container div-large" id="divCodigoBarras">
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="codigoBarras" class="fld-result">
+            <label for="codigoBarras" class="fld-label">Convertido para 'CÓDIGO DE BARRAS'</label>
+            <i class="icon-copy"></i>
+          </div>
+        </div>
+      </div>
+      <div class="group-container div-large" id="divLinhaDigitavel">
+        <div class="div-intermediary">
+          <div class="field-container">
+            <input type="text" id="linhaDigitavel" class="fld-result">
+            <label for="linhaDigitavel" class="fld-label">Convertido para 'LINHA DIGITÁVEL'</label>
+            <i class="icon-copy"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <ul class="footer-ul">
+      <li class="footer-li">
+        <a class="footer-a"
+          href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/support?filterBy=suggestions"
+          target="_blank">
+          Sugestões
+        </a>
+      </li>
+    </ul>
+
+
+    <a href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/reviews" target="_blank">
+      <div role="img" class="stars-container ">
+        <div class="stars-block">
+          <div class="stars-outline">
+            <div class="svg-stars svg-star-outline"></div>
+            <div class="svg-stars svg-star-outline"></div>
+            <div class="svg-stars svg-star-outline"></div>
+            <div class="svg-stars svg-star-outline"></div>
+            <div class="svg-stars svg-star-outline"></div>
+          </div>
+          <div class="stars-full" style="width: 91%;">
+            <div class="svg-stars svg-star"></div>
+            <div class="svg-stars svg-star"></div>
+            <div class="svg-stars svg-star"></div>
+            <div class="svg-stars svg-star"></div>
+            <div class="svg-stars svg-star"></div>
+          </div>
+        </div>
+        <span id="avaliar" class="tooltiptext hidden">Avaliar</span>
+      </div>
+    </a>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+
+</body>
+
+</html>
