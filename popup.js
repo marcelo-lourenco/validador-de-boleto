@@ -4,31 +4,25 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('mensagem').style.display = 'none';
   document.getElementById('result').style.display = 'none';
 
-
-  // Defina o número que você deseja converter em código de barras
-  var number = "836400000011331201380002812884627116080136181551";
-
-  // Selecione o elemento onde você deseja exibir o código de barras
-  var barcodeElement = document.getElementById("barcode");
-
-  // Gere o código de barras usando a biblioteca JsBarcode
-  JsBarcode(barcodeElement, number, {
-    format: "CODE128",
-    displayValue: true,
-    lineColor: "#000",
-    width: 1.5,
-    height: 40,
-    fontSize: 14
-  });
-
+  /**
+  * Copia o conteúdo de texto de um campo de entrada para a área de transferência quando o ícone associado é clicado.
+  * @param {MouseEvent} evento - O evento de clique.
+  */
   var copyIcons = document.querySelectorAll(".icon-copy");
   var tooltip = document.querySelector(".tooltip");
   copyIcons.forEach(function (copyIcon) {
     copyIcon.addEventListener("click", function () {
+      /**
+     * O campo de entrada associado ao ícone clicado.
+     * @type {HTMLInputElement}
+     */
       var inputField = this.parentElement.querySelector('input[type="text"]');
       inputField.select();
+      // Seleciona o conteúdo de texto do campo de entrada
       document.execCommand("copy");
+      // Remove a seleção do campo de entrada
       window.getSelection().removeAllRanges();
+      // Exibe a dica de ferramenta para indicar a cópia bem-sucedida
       tooltip.style.display = "inline-block";
       setTimeout(function () {
         tooltip.style.display = "none";
@@ -46,22 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("codigo").addEventListener("input", atualizarContadorCodigo);
 
-  /* 
-  function atualizarContadorCodigoBarras() {
-    const inputCodigo = document.getElementById("fldCodigoBarras");
-    const contadorCodigo = document.getElementById("contadorCodigoBarras");
-    contadorCodigo.textContent = inputCodigo.value.length;
-  }
-  document.getElementById("fldCodigoBarras").addEventListener("input", atualizarContadorCodigoBarras);
-  
-  function atualizarContadorLinhaDigitavel() {
-    const inputCodigo = document.getElementById("fldLinhaDigitavel");
-    const contadorCodigo = document.getElementById("contadorLinhaDigitavel");
-    contadorCodigo.textContent = inputCodigo.value.length;
-  }
-  document.getElementById("fldLinhaDigitavel").addEventListener("input", atualizarContadorLinhaDigitavel); 
-  */
-  /* let codigo = document.getElementById('codigo').value; */
   document.getElementById("btnValidar").addEventListener("click", () => { validarCodigo(document.getElementById('codigo').value) });
 
   function validarCodigo(codigo) {
@@ -109,16 +87,35 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('result').style.display = 'none';
     }
 
-
-
-
-
     const iconContainer = document.getElementById('iconContainer');
     iconContainer.innerHTML = ''; // Limpa qualquer ícone existente
 
     const icon = document.createElement('div');
     icon.className = resultado.sucesso ? 'icon-check' : 'icon-error';
     iconContainer.appendChild(icon);
+
+
+    // elementos onde serão exibidas as imegems dos código de barras
+    var imgCodigoBarras = document.getElementById("imgCodigoBarras");
+    var imgLinhaDigitavel = document.getElementById("imgLinhaDigitavel");
+
+    JsBarcode(imgCodigoBarras, resultado.codigoBarras, {
+      format: "CODE128",
+      displayValue: true,
+      lineColor: "#3a5e98",
+      width: 1.5,
+      height: 25,
+      fontSize: 16
+    });
+  
+    JsBarcode(imgLinhaDigitavel, resultado.linhaDigitavel, {
+      format: "CODE128",
+      displayValue: true,
+      lineColor: "#3a5e98",
+      width: 1.5,
+      height: 25,
+      fontSize: 16
+    });
   }
 
   function limparResult() {
@@ -132,35 +129,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('valor').value = '';
   }
 
-  function converterParaLinhaDigitavel() {
-    limparResult()
-    const fldCodigoBarras = document.getElementById('fldCodigoBarras').value;
-    const resultado = codBarras2LinhaDigitavel(fldCodigoBarras);
-    document.getElementById('linhaDigitavelConv').textContent = resultado;
-    /*  document.getElementById('resultLinhaDigitavel').style.display = 'block'; */
-  }
-
-  function converterParaCodigoDeBarras() {
-    limparResult()
-    const fldLinhaDigitavel = document.getElementById('fldLinhaDigitavel').value;
-    const resultado = linhaDigitavel2CodBarras(fldLinhaDigitavel);
-    document.getElementById('codigoBarrasConv').textContent = resultado;
-    /*  document.getElementById('resultCodigoDeBarras').style.display = 'block'; */
-  }
-
-
 
   /** 
   * Identifica o tipo de código inserido (se baseando na quantidade de dígitos).
-  * 
-  * ------------
-  * 
   * @param {string} codigo Numeração do boleto
-  * 
-  * ------------
-  * 
   * @return {string} CODIGO_DE_BARRAS
   * @return {string} LINHA_DIGITAVEL
+  * @return {string} TAMANHO_INCORRETO
   */
   let identificarTipoCodigo = (codigo) => {
     if (typeof codigo !== 'string') throw new TypeError('Insira uma string válida!');
@@ -178,13 +153,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Identifica o tipo de boleto inserido a partir da validação de seus dois dígitos iniciais.
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
-   * 
-   * -------------
-   * 
    * @return {string} BANCO
    * @return {string} ARRECADACAO_PREFEITURA
    * @return {string} ARRECADACAO_ORGAOS_GOVERNAMENTAIS
@@ -226,13 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
   /** 
    * Identifica o código de referência do boleto para determinar qual módulo
    * será utilizado para calcular os dígitos verificadores
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
-   * 
-   * -------------
-   * 
    * @return {json} {mod, efetivo}
    */
   let identificarReferencia = (codigo) => {
@@ -274,17 +237,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Identifica o fator da data de vencimento do boleto
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
-   * 
-   * -------------
-   * 
    * @return {Date} dataBoleto
    */
-
   function fatorVencimento(dias) {
     // Data Base Bacen = 07/10/1997
     // const date = new Date('10/07/1997 20:54:59');
@@ -298,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
     codigo = codigo.replace(/[^0-9]/g, '');
     const tipoBoleto = identificarTipoBoleto(codigo);
     let fatorData = '';
-    /* 
+    
     if (tipoCodigo === 'CODIGO_DE_BARRAS') {
       if (tipoBoleto === 'BANCO' || tipoBoleto === 'CARTAO_DE_CREDITO') {
         fatorData = codigo.substr(5, 4);
@@ -313,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fatorData = '0';
       }
     } 
-    */
+    
 
     if (tipoCodigo === 'CODIGO_DE_BARRAS') {
       fatorData = codigo.substr(5, 4);
@@ -329,14 +285,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Identifica o valor no CÓDIGO DE BARRAS do boleto do tipo 'Arrecadação'
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
-   * 
-   * -------------
-   * 
    * @return {string} valorFinal
    */
   let identificarValorCodBarrasArrecadacao = (codigo, tipoCodigo) => {
@@ -350,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (tipoCodigo == 'LINHA_DIGITAVEL') {
         valorBoleto = codigo.substr(4, 14);
         valorBoleto = codigo.split('');
-        valorBoleto.splice(11, 1);
+        valorBoleto.slice(11, 1);
         valorBoleto = valorBoleto.join('');
         valorBoleto = valorBoleto.substr(4, 11);
       } else if (tipoCodigo == 'CODIGO_DE_BARRAS') {
@@ -374,14 +324,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Identifica o valor no boleto inserido
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
-   * 
-   * -------------
-   * 
    * @return {float} valorFinal
    */
   let identificarValor = (codigo, tipoCodigo) => {
@@ -424,14 +368,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Define qual módulo deverá ser utilizado para calcular os dígitos verificadores
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {int} mod Modulo 10 ou Modulo 11
-   * 
-   * -------------
-   * 
    * @return {string} digitoVerificador
    */
   let digitosVerificadores = (codigo, mod) => {
@@ -450,14 +388,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Converte a numeração do código de barras em linha digitável
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {boolean} formatada Gerar numeração convertida com formatação (formatado = true / somente números = false)
-   * 
-   * -------------
-   * 
    * @return {string} resultado
    */
   let codBarras2LinhaDigitavel = (codigo, formatada) => {
@@ -522,13 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Converte a numeração da linha digitável em código de barras
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
-   * 
-   * -------------
-   * 
    * @return {string} resultado
    */
   let linhaDigitavel2CodBarras = (codigo) => {
@@ -562,15 +488,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Calcula o dígito verificador de toda a numeração do código de barras
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
    * @param {int} posicaoCodigo Posição onde deve se encontrar o dígito verificador
    * @param {int} mod Módulo 10 ou Módulo 11
-   * 
-   * -------------
-   * 
    * @return {string} numero
    */
   let calculaDVCodBarras = (codigo, posicaoCodigo, mod) => {
@@ -589,13 +509,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Informa se o código de barras inserido é válido, calculando seu dígito verificador.
-   * 
-   * -------------
-   * 
    * @param {string} codigo Numeração do boleto
-   * 
-   * -------------
-   * 
    * @return {boolean} true = boleto válido / false = boleto inválido
    */
   let validarCodigoComDV = (codigo, tipoCodigo) => {
@@ -680,13 +594,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Gerar código de barras já realizando o cálculo do dígito verificador
-   * 
-   * -------------
-   * 
    * @param {string} novoCodigo Numeração do boleto
-   * 
-   * -------------
-   * 
    * @return {string} numero
    */
   let geraCodBarras = (codigo) => {
@@ -807,7 +715,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (codigo.length != 44 && codigo.length != 46 && codigo.length != 47 && codigo.length != 48) {
       retorno.sucesso = false;
       retorno.codigoInput = codigo;
-      retorno.mensagem = 'O código inserido possui ' + codigo.length + ' dígitos. Por favor, insira uma numeração válida. \n\nCódigos de Barras SEMPRE devem ter 44 caracteres numéricos. \n\nLinhas Digitáveis podem ter as seguintes quatidades de números:\n 46 (boletos de cartão de crédito);\n 47 (boletos bancários/cobrança);\n 48 (contas convênio/arrecadação). \n\nQualquer caractere não numérico será desconsiderado.';
+      retorno.mensagem = 'Numeração inválida.\nO código inserido possui ' + codigo.length + ' números.\n\nCÓDIGOS DE BARRAS devem ter 44 caracteres numéricos. \n\nLINHAS DIGITÁVEIS devem ter as seguintes quatidades de números:\n 46 (boletos de cartão de crédito);\n 47 (boletos bancários/cobrança);\n 48 (contas convênio/arrecadação). \n\nQualquer caractere não numérico será desconsiderado.';
       retorno.tipoCodigoInput = 'TAMANHO INCORRETO';
     } else if (codigo.substr(0, 1) == '8' && codigo.length == 46 && codigo.length == 47) {
       retorno.sucesso = false;
@@ -849,13 +757,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Calcula o dígito verificador de uma numeração a partir do módulo 10
-   * 
-   * -------------
-   * 
    * @param {string} numero Numeração
-   * 
-   * -------------
-   * 
    * @return {string} soma
    */
   let calculaMod10 = (numero) => {
@@ -883,13 +785,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Calcula o dígito verificador de uma numeração a partir do módulo 11
-   * 
-   * -------------
-   * 
    * @param {string} x Numeração
-   * 
-   * -------------
-   * 
    * @return {string} digito
    */
   let calculaMod11 = (x) => {
@@ -919,16 +815,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /** 
    * Função auxiliar para remover os zeros à esquerda dos valores detectados no código inserido
-   * 
-   * -------------
-   * 
    * @param {string} str Texto a ser verificado
    * @param {string} repl Texto que substituirá
    * @param {int} inicio Posição inicial
    * @param {int} tamanho Tamanho
-   * 
-   * -------------
-   * 
    * @return {string} resultado
    */
   function substringReplace(str, repl, inicio, tamanho) {

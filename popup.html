@@ -41,13 +41,13 @@
       <div class="group-container">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="tipoCodigoInput" class="fld-result">
+            <input type="text" id="tipoCodigoInput" class="fld-result" disabled>
             <label for="tipoCodigoInput" class="fld-label">Tipo Informado</label>
           </div>
         </div>
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="tipoBoleto" class="fld-result">
+            <input type="text" id="tipoBoleto" class="fld-result" disabled>
             <label for="tipoBoleto" class="fld-label">Tipo de Boleto</label>
           </div>
         </div>
@@ -57,13 +57,13 @@
       <div class="group-container">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="vencimento" class="fld-result">
+            <input type="text" id="vencimento" class="fld-result" disabled>
             <label for="vencimento" class="fld-label">Vencimento</label>
           </div>
         </div>
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="valor" class="fld-result ">
+            <input type="text" id="valor" class="fld-result" disabled>
             <label for="valor" class="fld-label">Valor</label>
           </div>
 
@@ -72,7 +72,7 @@
       <div class="group-container div-large" id="divCodigoBarras">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="codigoBarras" class="fld-result">
+            <input type="text" id="codigoBarras" class="fld-result" disabled>
             <label for="codigoBarras" class="fld-label">Convertido para 'CÓDIGO DE BARRAS'</label>
             <i class="icon-copy"></i>
           </div>
@@ -81,7 +81,7 @@
       <div class="group-container div-large" id="divLinhaDigitavel">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="linhaDigitavel" class="fld-result">
+            <input type="text" id="linhaDigitavel" class="fld-result" disabled>
             <label for="linhaDigitavel" class="fld-label">Convertido para 'LINHA DIGITÁVEL'</label>
             <i class="icon-copy"></i>
           </div>
@@ -90,7 +90,14 @@
       <div class="group-container div-large">
         <div class="div-intermediary">
           <div class="field-container">
-            <img id="barcode">
+            <img id="imgCodigoBarras">
+          </div>
+        </div>
+      </div>
+      <div class="group-container div-large">
+        <div class="div-intermediary">
+          <div class="field-container">
+            <img id="imgLinhaDigitavel">
           </div>
         </div>
       </div>
