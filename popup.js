@@ -4,6 +4,23 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('mensagem').style.display = 'none';
   document.getElementById('result').style.display = 'none';
 
+
+  // Defina o número que você deseja converter em código de barras
+  var number = "836400000011331201380002812884627116080136181551";
+
+  // Selecione o elemento onde você deseja exibir o código de barras
+  var barcodeElement = document.getElementById("barcode");
+
+  // Gere o código de barras usando a biblioteca JsBarcode
+  JsBarcode(barcodeElement, number, {
+    format: "CODE128",
+    displayValue: true,
+    lineColor: "#000",
+    width: 1.5,
+    height: 40,
+    fontSize: 14
+  });
+
   var copyIcons = document.querySelectorAll(".icon-copy");
   var tooltip = document.querySelector(".tooltip");
   copyIcons.forEach(function (copyIcon) {
