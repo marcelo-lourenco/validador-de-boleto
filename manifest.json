@@ -1,8 +1,8 @@
 {
    "manifest_version": 3,
-   "name": "Validador Boleto e Conversor Código de Barras",
-   "description": "Valida Boletos e converte Código de Barras em Linha Digitável",
-   "version": "1.0.0",
+   "name": "Validador Boleto e Conversor Linha Digitável",
+   "description": "Para Validar Boletos e converter Linha Digitável em Código de Barras.",
+   "version": "0.0.1",
    "icons": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png",

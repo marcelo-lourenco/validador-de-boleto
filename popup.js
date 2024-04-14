@@ -12,17 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var tooltip = document.querySelector(".tooltip");
   copyIcons.forEach(function (copyIcon) {
     copyIcon.addEventListener("click", function () {
-      /**
-     * O campo de entrada associado ao ícone clicado.
-     * @type {HTMLInputElement}
-     */
       var inputField = this.parentElement.querySelector('input[type="text"]');
       inputField.select();
-      // Seleciona o conteúdo de texto do campo de entrada
       document.execCommand("copy");
-      // Remove a seleção do campo de entrada
       window.getSelection().removeAllRanges();
-      // Exibe a dica de ferramenta para indicar a cópia bem-sucedida
       tooltip.style.display = "inline-block";
       setTimeout(function () {
         tooltip.style.display = "none";
@@ -102,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     JsBarcode(imgCodigoBarras, resultado.codigoBarras, {
       format: "CODE128",
       displayValue: true,
-      lineColor: "#3a5e98",
+      lineColor: "#000",
       width: 1.5,
       height: 25,
       fontSize: 16
@@ -111,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
     JsBarcode(imgLinhaDigitavel, resultado.linhaDigitavel, {
       format: "CODE128",
       displayValue: true,
-      lineColor: "#3a5e98",
+      lineColor: "#000",
       width: 1.5,
       height: 25,
       fontSize: 16
