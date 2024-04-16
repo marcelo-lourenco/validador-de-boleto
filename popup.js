@@ -1,7 +1,7 @@
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById('mensagem').style.display = 'none';
+  document.getElementById('mensagem2').style.display = 'none';
   document.getElementById('result').style.display = 'none';
 
   /**
@@ -33,9 +33,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("codigo").addEventListener("input", atualizarContadorCodigo);
 
-  document.getElementById("btnValidar").addEventListener("click", () => { validarCodigo(document.getElementById('codigo').value) });
+  document.getElementById("btnValidar").addEventListener("click", () => {
+    validarCodigo(document.getElementById('codigo').value) 
+  });
+
+
+  function mostrarAviso() {
+    document.getElementById('mensagem').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('mensagem2').style.display = 'block';
+  }
+  
+  document.getElementById("lnkAtencao").addEventListener("click", mostrarAviso);
+  document.getElementById("icon-warning").addEventListener("click", mostrarAviso);
 
   function validarCodigo(codigo) {
+
     const resultado = validarBoleto(codigo);
     /* document.getElementById('status').textContent = resultado.sucesso; */
     document.getElementById('mensagem').textContent = resultado.mensagem;
@@ -75,9 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (resultado.sucesso) {
       document.getElementById('mensagem').style.display = 'none';
       document.getElementById('result').style.display = 'block';
+      document.getElementById('mensagem2').style.display = 'none';
     } else {
       document.getElementById('mensagem').style.display = 'block';
+      mensagem.className = 'message-error message ln';
       document.getElementById('result').style.display = 'none';
+
     }
 
     const iconContainer = document.getElementById('iconContainer');
@@ -91,24 +107,17 @@ document.addEventListener("DOMContentLoaded", function () {
     // elementos onde serão exibidas as imegems dos código de barras
     var imgCodigoBarras = document.getElementById("imgCodigoBarras");
     var imgLinhaDigitavel = document.getElementById("imgLinhaDigitavel");
-
-    JsBarcode(imgCodigoBarras, resultado.codigoBarras, {
+    
+    const barCodeParams = {
       format: "CODE128",
       displayValue: true,
       lineColor: "#000",
       width: 1.5,
       height: 25,
       fontSize: 16
-    });
-  
-    JsBarcode(imgLinhaDigitavel, resultado.linhaDigitavel, {
-      format: "CODE128",
-      displayValue: true,
-      lineColor: "#000",
-      width: 1.5,
-      height: 25,
-      fontSize: 16
-    });
+    }
+    JsBarcode(imgCodigoBarras, resultado.codigoBarras, barCodeParams);
+    JsBarcode(imgLinhaDigitavel, resultado.linhaDigitavel, barCodeParams);
   }
 
   function limparResult() {

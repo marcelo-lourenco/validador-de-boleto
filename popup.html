@@ -5,13 +5,14 @@
   <meta charset="UTF-8">
   <meta name="author" content="Marcelo Lourenço">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador de Dados</title>
+  <title>Validador de Boletos</title>
   <link rel="stylesheet" href="popup.css">
   <link rel="shortcut icon" href="icons/favicon.ico">
 </head>
 
 <body>
-  <div class="container">
+  <div id="container" class="container">
+
     <div class="field-container">
       <h1 class="page-title" id="pageTitle">
         Validador de Boleto
@@ -20,9 +21,9 @@
     </div>
     <span class="tooltip" style="display: none;">Copiado</span>
     <div class="field-container">
-      <input type="text" id="codigo" class="input-insert" maxlength="60" placeholder=""
-        value="34191.75124 34567.871230 41234.560005 4 96800000026035">
-      <label for="codigo" class="fld-label">Insira o 'CÓDIGO DE BARRAS' ou a 'LINHA DIGITÁVEL'</label>
+      <input type="text" id="codigo" class="input-insert" maxlength="60" placeholder>
+      <label for="codigo" class="fld-label">Insira o 'CÓDIGO DE BARRAS' ou a
+        'LINHA DIGITÁVEL'</label>
       <div class="contador-container">
         <span id="fldContador">0</span>
       </div>
@@ -30,11 +31,54 @@
 
     </div>
     <div class="field-container">
-      <button type="button" id="btnValidar" class="">Validar</button>
+      <button type="button" id="btnValidar" class>Validar</button>
     </div>
 
     <div id="result-message" class="field-container div-result">
-      <span id="mensagem" class="message-format ln"></span>
+
+      <span id="mensagem" class="message-warn ln">
+        <b>Atenção: </b>Esta extensão não verifica a autenticidade do boleto, isto é, não confirma se o documento é
+        genuíno ou foi adulterado.
+        <br>Para mais informação, clique <a href="#" id="lnkAtencao">aqui</a>
+      </span>
+
+      <div id="mensagem2" class="ln">
+        <article>
+          <h1>Sobre:</h1>
+          <p>Esta extensão foi projetada com o propósito de auxiliar na validação de números de boletos e conveter
+            "Linha Digitável" em "Código de Barras".
+            <br>Seu principal objetivo é garantir que o número inserido segue os padrões de um boleto
+            válido, incluindo a correta composição dos dígitos verificadores.
+          </p>
+
+          <h2>O que a extensão faz:</h2>
+          <ul>
+            <li>Verifica se o número do boleto digitado está formatado corretamente.</li>
+            <li>Confere se os dígitos verificadores estão conforme as regras estabelecidas para boletos válidos.</li>
+            <li>Alerta sobre erros comuns de digitação que possam invalidar o boleto.</li>
+            <li>Converte "Linha Digitável" em "Código de Barras"</li>
+          </ul>
+
+          <h2>O que a extensão não faz:</h2>
+          <div class="message-warn">
+            <br>
+            <ul>
+              <li>Não verifica a autenticidade do boleto, isto é, não confirma se o documento é genuíno ou foi adulterado.</li>
+              <li>Não fornece informações sobre a instituição financeira ou a empresa emissora do boleto.</li>
+              <li>Não substitui a análise detalhada pelo protador do documento ou pessoa especializada.</li>
+            </ul>
+            <br>
+          </div>
+
+          <h2>Recomendações:</h2>
+          <p>Se você suspeita que o seu boleto pode ter sido fraudado, é crucial entrar em contato com a instituição
+            financeira ou a empresa responsável pela emissão do documento.
+            Eles poderão fornecer orientações específicas sobre como proceder e podem ajudar a verificar a autenticidade do boleto.</p>
+          <p>Lembre-se sempre de verificar a origem dos boletos que você recebe, especialmente se forem recebidos por
+            e-mail ou outros meios eletrônicos. Esteja atento a qualquer sinal de irregularidade, como alterações nos
+            dados do boleto ou instruções de pagamento suspeitas.</p>
+        </article>
+      </div>
     </div>
     <div id="result" class="div-result">
 
@@ -52,8 +96,6 @@
           </div>
         </div>
       </div>
-
-
       <div class="group-container">
         <div class="div-intermediary">
           <div class="field-container">
@@ -104,19 +146,24 @@
         </div>
       </div>
     </div>
+
   </div>
 
   <div class="footer">
     <ul class="footer-ul">
       <li class="footer-li">
+        <div id="icon-warning" class="icon-warning"></div>
+        <!-- <span class="floating-text">Atenção</span> -->
+      </li>
+
+      <li class="footer-li">
         <a class="footer-a"
           href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/support?filterBy=suggestions"
           target="_blank">
-          Sugestões
+          <div id="icon-support" class="icon-support"></div>
         </a>
       </li>
     </ul>
-
 
     <a href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/reviews" target="_blank">
       <div role="img" class="stars-container ">
@@ -128,7 +175,7 @@
             <div class="svg-stars svg-star-outline"></div>
             <div class="svg-stars svg-star-outline"></div>
           </div>
-          <div class="stars-full" style="width: 91%;">
+          <div class="stars-full" style="width: 99%;">
             <div class="svg-stars svg-star"></div>
             <div class="svg-stars svg-star"></div>
             <div class="svg-stars svg-star"></div>
