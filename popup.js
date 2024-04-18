@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('mensagem2').style.display = 'block';
   }
   
-  document.getElementById("lnkAtencao").addEventListener("click", mostrarAviso);
+  /* document.getElementById("lnkAtencao").addEventListener("click", mostrarAviso); */
   document.getElementById("icon-warning").addEventListener("click", mostrarAviso);
 
   function validarCodigo(codigo) {
@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('mensagem').style.display = 'block';
       mensagem.className = 'message-error message ln';
       document.getElementById('result').style.display = 'none';
+      document.getElementById('mensagem2').style.display = 'none';
 
     }
 

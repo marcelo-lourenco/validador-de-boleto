@@ -36,16 +36,16 @@
 
     <div id="result-message" class="field-container div-result">
 
-      <span id="mensagem" class="message-warn ln">
-        <b>Atenção: </b>Esta extensão não verifica a autenticidade do boleto, isto é, não confirma se o documento é
+      <span id="mensagem" class="">
+       <!--  <b>Atenção: </b>Esta extensão não verifica a autenticidade do boleto, isto é, não confirma se o documento é
         genuíno ou foi adulterado.
-        <br>Para mais informação, clique <a href="#" id="lnkAtencao">aqui</a>
+        <br>Para mais informação, clique <a href="#" id="lnkAtencao">aqui</a> -->
       </span>
 
       <div id="mensagem2" class="ln">
         <article>
           <h1>Sobre:</h1>
-          <p>Esta extensão foi projetada com o propósito de auxiliar na validação de números de boletos e conveter
+          <p>Esta extensão foi projetada com o propósito de auxiliar na validação de números de boletos e converter
             "Linha Digitável" em "Código de Barras".
             <br>Seu principal objetivo é garantir que o número inserido segue os padrões de um boleto
             válido, incluindo a correta composição dos dígitos verificadores.
@@ -65,7 +65,7 @@
             <ul>
               <li>Não verifica a autenticidade do boleto, isto é, não confirma se o documento é genuíno ou foi adulterado.</li>
               <li>Não fornece informações sobre a instituição financeira ou a empresa emissora do boleto.</li>
-              <li>Não substitui a análise detalhada pelo protador do documento ou pessoa especializada.</li>
+              <li>Não substitui a análise detalhada pelo portador do documento ou pessoa especializada.</li>
             </ul>
             <br>
           </div>
@@ -151,22 +151,23 @@
 
   <div class="footer">
     <ul class="footer-ul">
-      <li class="footer-li">
-        <div id="icon-warning" class="icon-warning"></div>
-        <!-- <span class="floating-text">Atenção</span> -->
+      <li class="footer-li tooltip-lnk">
+          <div id="icon-warning" class="icon-warning"></div>
+          <span class="tooltiptext">Atenção</span>
       </li>
 
-      <li class="footer-li">
-        <a class="footer-a"
-          href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/support?filterBy=suggestions"
+      <li class="footer-li tooltip-lnk">
+        <a class=""
+          href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/support?filterBy=suggestions"
           target="_blank">
           <div id="icon-support" class="icon-support"></div>
+          <span class="tooltiptext">Suporte</span>
         </a>
       </li>
     </ul>
 
-    <a href="https://chromewebstore.google.com/detail/ipfihnddjaepajgdamecijfdefikdgam/reviews" target="_blank">
-      <div role="img" class="stars-container ">
+    <a href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/reviews" target="_blank">
+      <div role="img" class="stars-container tooltip-lnk">
         <div class="stars-block">
           <div class="stars-outline">
             <div class="svg-stars svg-star-outline"></div>
@@ -180,11 +181,13 @@
             <div class="svg-stars svg-star"></div>
             <div class="svg-stars svg-star"></div>
             <div class="svg-stars svg-star"></div>
-            <div class="svg-stars svg-star"></div>
+            <div class="svg-stars svg-star"></div> 
           </div>
+          <span class="tooltiptext">Avaliar</span>
         </div>
-        <span id="avaliar" class="tooltiptext hidden">Avaliar</span>
+        
       </div>
+      <span id="avaliar" class="tooltiptext hidden">Avaliar</span>
     </a>
   </div>
 
