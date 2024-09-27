@@ -17,6 +17,6 @@ Seu principal objetivo é garantir que o número inserido segue os padrões de u
 * Não fornece informações sobre a instituição financeira ou a empresa emissora do boleto.
 * Não substitui a análise detalhada pelo protador do documento ou pessoa especializada.
 
-## Demo
+## Instalar a extensão:
 
-[https://chromewebstore.google.com/detail/](https://chromewebstore.google.com/detail/)
+[https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn](https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn)
