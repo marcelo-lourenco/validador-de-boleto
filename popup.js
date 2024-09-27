@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("codigo").addEventListener("input", atualizarContadorCodigo);
 
   document.getElementById("btnValidar").addEventListener("click", () => {
-    validarCodigo(document.getElementById('codigo').value) 
+    validarCodigo(document.getElementById('codigo').value)
   });
 
 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('result').style.display = 'none';
     document.getElementById('mensagem2').style.display = 'block';
   }
-  
+
   /* document.getElementById("lnkAtencao").addEventListener("click", mostrarAviso); */
   document.getElementById("icon-warning").addEventListener("click", mostrarAviso);
 
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // elementos onde serão exibidas as imegems dos código de barras
     var imgCodigoBarras = document.getElementById("imgCodigoBarras");
     var imgLinhaDigitavel = document.getElementById("imgLinhaDigitavel");
-    
+
     const barCodeParams = {
       format: "CODE128",
       displayValue: true,
@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  /** 
+  /**
   * Identifica o tipo de código inserido (se baseando na quantidade de dígitos).
   * @param {string} codigo Numeração do boleto
   * @return {string} CODIGO_DE_BARRAS
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  /** 
+  /**
    * Identifica o tipo de boleto inserido a partir da validação de seus dois dígitos iniciais.
    * @param {string} codigo Numeração do boleto
    * @return {string} BANCO
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  /** 
+  /**
    * Identifica o código de referência do boleto para determinar qual módulo
    * será utilizado para calcular os dígitos verificadores
    * @param {string} codigo Numeração do boleto
@@ -238,26 +238,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  /** 
+  /**
    * Identifica o fator da data de vencimento do boleto
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
    * @return {Date} dataBoleto
    */
-  function fatorVencimento(dias) {
-    // Data Base Bacen = 07/10/1997
-    // const date = new Date('10/07/1997 20:54:59');
-    const date = new Date('1997-10-07T20:54:59.000Z');
-    date.setTime(date.getTime() + (dias * 24 * 60 * 60 * 1000));
-    const vencimento = ("0" + (date.getDate())).slice(-2) + '/' + ("0" + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear()
-    return vencimento
+  function fatorVencimento(fatorVencimento) {
+    const dataBaseInicial = new Date(1997, 9, 7); // 07/10/1997
+    const dataBaseNovoCiclo = new Date(2025, 1, 22); // 22/02/2025 (Novo ciclo começa)
+
+    const fatorInt = parseInt(fatorVencimento);
+
+    // TODO Makeshift: 5000, equivale a 16/06/2011 e a fronteira deveria ser em 9999. Porém, pode afetar boletos vencidos no últimos anos
+    if (fatorInt >= 1000 && fatorInt <= 5000) {
+      // Se o fator está entre 1000 e 9999 (Ciclo novo a partir de 22/02/2025)
+      const diasAdicionais = fatorInt - 1000;
+      dataBaseNovoCiclo.setDate(dataBaseNovoCiclo.getDate() + diasAdicionais);
+      return dataBaseNovoCiclo.toLocaleDateString('pt-BR'); // Formato dd/mm/aaaa
+    } else {
+      // Fator de vencimento válido entre 0 e 999 (ciclo antigo antes de 22/02/2025)
+      const diasAdicionais = fatorInt;
+      dataBaseInicial.setDate(dataBaseInicial.getDate() + diasAdicionais);
+      return dataBaseInicial.toLocaleDateString('pt-BR'); // Formato dd/mm/aaaa
+    }
   }
 
   let identificarData = (codigo, tipoCodigo) => {
     codigo = codigo.replace(/[^0-9]/g, '');
     const tipoBoleto = identificarTipoBoleto(codigo);
     let fatorData = '';
-    
+
     if (tipoCodigo === 'CODIGO_DE_BARRAS') {
       if (tipoBoleto === 'BANCO' || tipoBoleto === 'CARTAO_DE_CREDITO') {
         fatorData = codigo.substr(5, 4);
@@ -271,8 +282,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         fatorData = '0';
       }
-    } 
-    
+    }
+
 
     if (tipoCodigo === 'CODIGO_DE_BARRAS') {
       fatorData = codigo.substr(5, 4);
@@ -286,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
 
-  /** 
+  /**
    * Identifica o valor no CÓDIGO DE BARRAS do boleto do tipo 'Arrecadação'
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
@@ -325,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return valorFinal;
   }
 
-  /** 
+  /**
    * Identifica o valor no boleto inserido
    * @param {string} codigo Numeração do boleto
    * @param {string} tipoCodigo tipo de código inserido (CODIGO_DE_BARRAS / LINHA_DIGITAVEL)
@@ -369,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return parseFloat(valorFinal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
-  /** 
+  /**
    * Define qual módulo deverá ser utilizado para calcular os dígitos verificadores
    * @param {string} codigo Numeração do boleto
    * @param {int} mod Modulo 10 ou Modulo 11
@@ -389,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  /** 
+  /**
    * Converte a numeração do código de barras em linha digitável
    * @param {string} codigo Numeração do boleto
    * @param {boolean} formatada Gerar numeração convertida com formatação (formatado = true / somente números = false)
@@ -455,7 +466,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return resultado;
   }
 
-  /** 
+  /**
    * Converte a numeração da linha digitável em código de barras
    * @param {string} codigo Numeração do boleto
    * @return {string} resultado
@@ -489,7 +500,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return resultado;
   }
 
-  /** 
+  /**
    * Calcula o dígito verificador de toda a numeração do código de barras
    * @param {string} codigo Numeração do boleto
    * @param {int} posicaoCodigo Posição onde deve se encontrar o dígito verificador
@@ -510,7 +521,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  /** 
+  /**
    * Informa se o código de barras inserido é válido, calculando seu dígito verificador.
    * @param {string} codigo Numeração do boleto
    * @return {boolean} true = boleto válido / false = boleto inválido
@@ -595,7 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return codigo === resultado;
   }
 
-  /** 
+  /**
    * Gerar código de barras já realizando o cálculo do dígito verificador
    * @param {string} novoCodigo Numeração do boleto
    * @return {string} numero
@@ -621,13 +632,13 @@ document.addEventListener("DOMContentLoaded", function () {
    * ## __`BOLETO COBRANÇA`__
    * ### __AS POSIÇÕES AQUI MENCIONADAS PARTEM DO NÚMERO 0 E NÃO DO 1, A FIM DE FACILITAR O ENTENDIMENTO LÓGICO__
    * ---------------------------------------------------------
-   * 
+   *
    * ### __TIPO:__ CÓDIGO DE BARRAS (44 POSIÇÕES NUMÉRICAS)
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * #### __EXEMPLO:__ 11123444455555555556666666666666666666666666
-   * 
+   *
    * Bloco | Posições | Definição
    * --- | --- | ---
    * __1__ | **0 a 2**  | `Código do Banco na Câmara de Compensação`
@@ -636,15 +647,15 @@ document.addEventListener("DOMContentLoaded", function () {
    * __4__ | **5 a 8**  | `Fator de Vencimento`
    * __5__ | **9 a 18**  | `Valor com 2 casas de centavos`
    * __6__ | **19 a 43**  | `Campo Livre (De uso da instituição bancária)`
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * ### __TIPO:__ LINHA DIGITÁVEL (47 POSIÇÕES NUMÉRICAS)
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * #### __EXEMPLO__: AAABC.CCCCX DDDDD.DDDDDY EEEEE.EEEEEZ K UUUUVVVVVVVVVV
-   * 
+   *
    * Campo | Posições linha dig. | Definição
    * --- | --- | ---
    * __A__ | **0 a 2** (0 a 2 do cód. barras)  | `Código do Banco na Câmara de compensação`
@@ -658,17 +669,17 @@ document.addEventListener("DOMContentLoaded", function () {
    * __K__ | **32 a 32** (4 a 4 do cód. barras)  | `Dígito verificador do código de barras`
    * __U__ | **33 a 36** (5 a 8 do cód. barras)  | `Fator de Vencimento`
    * __V__ | **37 a 43** (9 a 18 do cód. barras)  | `Valor`
-   * 
+   *
    * ## __`CONTA CONVÊNIO / ARRECADAÇÃO`__
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * ### __TIPO:__ CÓDIGO DE BARRAS (44 POSIÇÕES NUMÉRICAS)
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * #### __EXEMPLO__: 12345555555555566667777777777777777777777777
-   * 
+   *
    * Campo | Posições | Definição
    * --- | --- | ---
    * __1__ | **0 a 0**  | `"8" Identificação da Arrecadação/convênio`
@@ -678,15 +689,15 @@ document.addEventListener("DOMContentLoaded", function () {
    * __5__ | **4 a 14**  | `Valor efetivo ou valor referência`
    * __6__ | **15 a 18**  | `Identificação da empresa/órgão`
    * __7__ | **19 a 43**  | `Campo livre de utilização da empresa/órgão`
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * ### __TIPO:__ LINHA DIGITÁVEL (48 POSIÇÕES NUMÉRICAS)
-   * 
+   *
    * ---------------------------------------------------------
-   * 
+   *
    * #### __EXEMPLO__: ABCDEEEEEEE-W EEEEFFFFGGG-X GGGGGGGGGGG-Y GGGGGGGGGGG-Z
-   * 
+   *
    * Campo | Posições | Definição
    * --- | --- | ---
    * __A__ | **0 a 0**  | `"8" Identificação da Arrecadação/convênio`
@@ -758,7 +769,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return retorno;
   }
 
-  /** 
+  /**
    * Calcula o dígito verificador de uma numeração a partir do módulo 10
    * @param {string} numero Numeração
    * @return {string} soma
@@ -786,7 +797,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return soma;
   }
 
-  /** 
+  /**
    * Calcula o dígito verificador de uma numeração a partir do módulo 11
    * @param {string} x Numeração
    * @return {string} digito
@@ -816,7 +827,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   }
 
-  /** 
+  /**
    * Função auxiliar para remover os zeros à esquerda dos valores detectados no código inserido
    * @param {string} str Texto a ser verificado
    * @param {string} repl Texto que substituirá
