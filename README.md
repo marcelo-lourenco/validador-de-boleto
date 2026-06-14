@@ -1,6 +1,6 @@
 # Validador de Boletos - Extensão Chrome
 
-Esta extensão foi projetada com o propósito de auxiliar na validação de números de boletos e conveter "Linha Digitável" em "Código de Barras".
+Esta extensão foi projetada com o propósito de auxiliar na validação de números de boletos e converter "Linha Digitável" em "Código de Barras".
 
 Seu principal objetivo é garantir que o número inserido segue os padrões de um boleto válido, incluindo a correta composição dos dígitos verificadores.
 
@@ -15,7 +15,14 @@ Seu principal objetivo é garantir que o número inserido segue os padrões de u
 
 * Não verifica a autenticidade do boleto, isto é, não confirma se o documento é genuíno ou foi adulterado.
 * Não fornece informações sobre a instituição financeira ou a empresa emissora do boleto.
-* Não substitui a análise detalhada pelo protador do documento ou pessoa especializada.
+* Não substitui a análise detalhada pelo portador do documento ou pessoa especializada.
+
+## Ferramentas Online:
+
+Você também pode utilizar as nossas ferramentas diretamente na web:
+
+* **Validador de Boleto Online**: [box4.dev/pt-br/brasil/validador-boleto](https://box4.dev/pt-br/brasil/validador-boleto?utm_source=validador_boleto_chrome_extension)
+* **Gerador de Boleto Online**: [box4.dev/pt-br/brasil/gerador-boleto](https://box4.dev/pt-br/brasil/gerador-boleto?utm_source=validador_boleto_chrome_extension)
 
 ## Instalar a extensão:
 

@@ -6,6 +6,9 @@
   <meta name="author" content="Marcelo Lourenço">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Validador de Boletos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="popup.css">
   <link rel="shortcut icon" href="icons/favicon.ico">
 </head>
@@ -13,31 +16,41 @@
 <body>
   <div id="container" class="container">
 
-    <div class="field-container">
-      <h1 class="page-title" id="pageTitle">
-        Validador de Boleto
-      </h1>
-
+    <div class="header-container">
+      <h1 class="page-title" id="pageTitle">Validador de Boleto</h1>
+      <button type="button" id="themeToggle" class="theme-toggle-btn" aria-label="Alternar Tema">
+        <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+        </svg>
+        <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      </button>
     </div>
-    <span class="tooltip" style="display: none;">Copiado</span>
-    <div class="field-container">
-      <input type="text" id="codigo" class="input-insert" maxlength="60" placeholder>
-      <label for="codigo" class="fld-label">Insira o 'CÓDIGO DE BARRAS' ou a
-        'LINHA DIGITÁVEL'</label>
+
+    <div id="toast" class="toast" role="alert" aria-live="polite">Copiado!</div>
+
+    <div class="field-container main-input-container">
+      <input type="text" id="codigo" class="input-insert" placeholder=" " autocomplete="off" spellcheck="false">
+      <label for="codigo" class="fld-label">Insira o Código de Barras ou a Linha Digitável</label>
       <div class="contador-container">
         <span id="fldContador">0</span>
       </div>
       <div class="icon-container" id="iconContainer"></div>
-
     </div>
-    <div class="field-container">
-      <button type="button" id="btnValidar" class>Validar</button>
+
+    <div class="field-container button-container">
+      <button type="button" id="btnValidar" class="btn-primary">Validar Boleto</button>
     </div>
 
     <div id="result-message" class="field-container div-result">
 
       <span id="mensagem" class="">
-       <!--  <b>Atenção: </b>Esta extensão não verifica a autenticidade do boleto, isto é, não confirma se o documento é
+        <!--  <b>Atenção: </b>Esta extensão não verifica a autenticidade do boleto, isto é, não confirma se o documento é
         genuíno ou foi adulterado.
         <br>Para mais informação, clique <a href="#" id="lnkAtencao">aqui</a> -->
       </span>
@@ -61,19 +74,19 @@
 
           <h2>O que a extensão não faz:</h2>
           <div class="message-warn">
-            <br>
             <ul>
-              <li>Não verifica a autenticidade do boleto, isto é, não confirma se o documento é genuíno ou foi adulterado.</li>
+              <li>Não verifica a autenticidade do boleto, isto é, não confirma se o documento é genuíno ou foi
+                adulterado.</li>
               <li>Não fornece informações sobre a instituição financeira ou a empresa emissora do boleto.</li>
               <li>Não substitui a análise detalhada pelo portador do documento ou pessoa especializada.</li>
             </ul>
-            <br>
           </div>
 
           <h2>Recomendações:</h2>
           <p>Se você suspeita que o seu boleto pode ter sido fraudado, é crucial entrar em contato com a instituição
             financeira ou a empresa responsável pela emissão do documento.
-            Eles poderão fornecer orientações específicas sobre como proceder e podem ajudar a verificar a autenticidade do boleto.</p>
+            Eles poderão fornecer orientações específicas sobre como proceder e podem ajudar a verificar a autenticidade
+            do boleto.</p>
           <p>Lembre-se sempre de verificar a origem dos boletos que você recebe, especialmente se forem recebidos por
             e-mail ou outros meios eletrônicos. Esteja atento a qualquer sinal de irregularidade, como alterações nos
             dados do boleto ou instruções de pagamento suspeitas.</p>
@@ -85,13 +98,13 @@
       <div class="group-container">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="tipoCodigoInput" class="fld-result" disabled>
+            <input type="text" id="tipoCodigoInput" class="fld-result" placeholder=" " readonly>
             <label for="tipoCodigoInput" class="fld-label">Tipo Informado</label>
           </div>
         </div>
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="tipoBoleto" class="fld-result" disabled>
+            <input type="text" id="tipoBoleto" class="fld-result" placeholder=" " readonly>
             <label for="tipoBoleto" class="fld-label">Tipo de Boleto</label>
           </div>
         </div>
@@ -99,102 +112,86 @@
       <div class="group-container">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="vencimento" class="fld-result" disabled>
+            <input type="text" id="vencimento" class="fld-result" placeholder=" " readonly>
             <label for="vencimento" class="fld-label">Vencimento</label>
           </div>
         </div>
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="valor" class="fld-result" disabled>
+            <input type="text" id="valor" class="fld-result" placeholder=" " readonly>
             <label for="valor" class="fld-label">Valor</label>
           </div>
-
         </div>
       </div>
       <div class="group-container div-large" id="divCodigoBarras">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="codigoBarras" class="fld-result">
+            <input type="text" id="codigoBarras" class="fld-result" placeholder=" " readonly>
             <label for="codigoBarras" class="fld-label">Convertido para 'CÓDIGO DE BARRAS'</label>
-            <i class="icon-copy"></i>
+            <button type="button" class="icon-copy" aria-label="Copiar Código de Barras"></button>
           </div>
         </div>
       </div>
       <div class="group-container div-large" id="divLinhaDigitavel">
         <div class="div-intermediary">
           <div class="field-container">
-            <input type="text" id="linhaDigitavel" class="fld-result">
+            <input type="text" id="linhaDigitavel" class="fld-result" placeholder=" " readonly>
             <label for="linhaDigitavel" class="fld-label">Convertido para 'LINHA DIGITÁVEL'</label>
-            <i class="icon-copy"></i>
+            <button type="button" class="icon-copy" aria-label="Copiar Linha Digitável"></button>
           </div>
         </div>
       </div>
-      <div class="group-container div-large">
-        <div class="div-intermediary">
-          <div class="field-container">
-            <img id="imgCodigoBarras">
-            <span class="floating-text">Código de Barras</span>
-          </div>
-        </div>
-      </div>
-      <div class="group-container div-large">
-        <div class="div-intermediary">
-          <div class="field-container">
-            <img id="imgLinhaDigitavel">
-            <span class="floating-text">Linha Digitável</span>
-          </div>
-        </div>
-      </div>
+
     </div>
 
   </div>
 
   <div class="footer">
-    <ul class="footer-ul">
-      <li class="footer-li tooltip-lnk">
-          <div id="icon-warning" class="icon-warning"></div>
-          <span class="tooltiptext">Atenção</span>
-      </li>
-
-      <li class="footer-li tooltip-lnk">
-        <a class=""
-          href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/support?filterBy=suggestions"
-          target="_blank">
+    <div class="footer-left">
+      <div class="tooltip-lnk">
+        <div id="icon-warning" class="icon-warning"></div>
+        <span class="tooltiptext">Atenção</span>
+      </div>
+      <div class="tooltip-lnk">
+        <a href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/support?filterBy=suggestions"
+          target="_blank" aria-label="Suporte">
           <div id="icon-support" class="icon-support"></div>
           <span class="tooltiptext">Suporte</span>
         </a>
-      </li>
-    </ul>
-
-    <a href="https://box4.dev" target="_blank" class="vb-link">box4.dev</a>
-
-    <a href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/reviews" target="_blank">
-      <div role="img" class="stars-container tooltip-lnk">
-        <div class="stars-block">
-          <div class="stars-outline">
-            <div class="svg-stars svg-star-outline"></div>
-            <div class="svg-stars svg-star-outline"></div>
-            <div class="svg-stars svg-star-outline"></div>
-            <div class="svg-stars svg-star-outline"></div>
-            <div class="svg-stars svg-star-outline"></div>
-          </div>
-          <div class="stars-full" style="width: 99%;">
-            <div class="svg-stars svg-star"></div>
-            <div class="svg-stars svg-star"></div>
-            <div class="svg-stars svg-star"></div>
-            <div class="svg-stars svg-star"></div>
-            <div class="svg-stars svg-star"></div> 
-          </div>
-          <span class="tooltiptext">Avaliar</span>
-        </div>
-        
       </div>
-      <span id="avaliar" class="tooltiptext hidden">Avaliar</span>
-    </a>
+    </div>
+
+    <div class="footer-center">
+      <div class="tooltip-lnk">
+        <a href="https://box4.dev/pt-br/brasil/gerador-boleto?utm_source=validador_boleto_chrome_extension"
+          target="_blank" aria-label="Gerador Online">
+          <div class="icon-gerador"></div>
+          <span class="tooltiptext">Gerador Online</span>
+        </a>
+      </div>
+      <div class="tooltip-lnk">
+        <a href="https://box4.dev/pt-br/brasil/validador-boleto?utm_source=validador_boleto_chrome_extension"
+          target="_blank" aria-label="Validador Online">
+          <div class="icon-validador"></div>
+          <span class="tooltiptext">Validador Online</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-right">
+      <a href="https://chromewebstore.google.com/detail/dlfdmghbdpojkioblkohjafoccdnponn/reviews" target="_blank"
+        aria-label="Avaliar Extensão">
+        <div class="stars-container tooltip-lnk">
+          <div class="stars-block">
+            <div class="svg-star"></div>
+            <span class="tooltiptext">Avaliar</span>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
 
   <script type="module" src="popup.js"></script>
-  <script src="JsBarcode.all.min.js"></script>
 
 </body>
 

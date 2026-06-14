@@ -4,39 +4,86 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('mensagem2').style.display = 'none';
   document.getElementById('result').style.display = 'none';
 
-  /**
-  * Copia o conteúdo de texto de um campo de entrada para a área de transferência quando o ícone associado é clicado.
-  * @param {MouseEvent} evento - O evento de clique.
-  */
+  // --- ALTERNADOR DE TEMA (CLARO/ESCURO) ---
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('theme');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+    document.body.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+  }
+
+  themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+
+  // --- COPIAR PARA ÁREA DE TRANSFERÊNCIA (API Clipboard) ---
   var copyIcons = document.querySelectorAll(".icon-copy");
-  var tooltip = document.querySelector(".tooltip");
+  var toast = document.getElementById("toast");
+  
   copyIcons.forEach(function (copyIcon) {
+    // Acessibilidade de teclado para botão de cópia
+    copyIcon.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        this.click();
+      }
+    });
+
     copyIcon.addEventListener("click", function () {
       var inputField = this.parentElement.querySelector('input[type="text"]');
-      inputField.select();
-      document.execCommand("copy");
-      window.getSelection().removeAllRanges();
-      tooltip.style.display = "inline-block";
-      setTimeout(function () {
-        tooltip.style.display = "none";
-      }, 2000);
+      if (inputField && inputField.value) {
+        navigator.clipboard.writeText(inputField.value).then(() => {
+          toast.classList.add("show");
+          setTimeout(function () {
+            toast.classList.remove("show");
+          }, 2000);
+        }).catch(err => {
+          console.error('Falha ao copiar texto: ', err);
+        });
+      }
     });
   });
 
+  // --- ATUALIZAÇÃO DO CONTADOR E VALIDAÇÃO AUTOMÁTICA ---
+  const inputCodigo = document.getElementById("codigo");
+  const contadorCodigo = document.getElementById("fldContador");
 
   function atualizarContadorCodigo() {
-    const inputCodigo = document.getElementById("codigo");
-    const contadorCodigo = document.getElementById("fldContador");
     const numeros = inputCodigo.value.match(/\d/g);
-    contadorCodigo.textContent = numeros ? numeros.length : 0;
+    const totalNumeros = numeros ? numeros.length : 0;
+    contadorCodigo.textContent = totalNumeros;
+
+    // Se o campo estiver vazio, limpa resultados e mensagens
+    if (inputCodigo.value.trim() === "") {
+      limparResult();
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('mensagem').style.display = 'none';
+      const iconContainer = document.getElementById('iconContainer');
+      iconContainer.innerHTML = '';
+    } else if (totalNumeros === 44 || totalNumeros === 47 || totalNumeros === 48) {
+      // Valida automaticamente ao atingir comprimentos padrão
+      validarCodigo(inputCodigo.value);
+    }
   }
 
-  document.getElementById("codigo").addEventListener("input", atualizarContadorCodigo);
+  inputCodigo.addEventListener("input", atualizarContadorCodigo);
 
-  document.getElementById("btnValidar").addEventListener("click", () => {
-    validarCodigo(document.getElementById('codigo').value)
+  // Submissão com a tecla Enter
+  inputCodigo.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      validarCodigo(inputCodigo.value);
+    }
   });
 
+  document.getElementById("btnValidar").addEventListener("click", () => {
+    validarCodigo(inputCodigo.value)
+  });
 
   function mostrarAviso() {
     document.getElementById('mensagem').style.display = 'none';
@@ -44,27 +91,35 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('mensagem2').style.display = 'block';
   }
 
-  /* document.getElementById("lnkAtencao").addEventListener("click", mostrarAviso); */
-  document.getElementById("icon-warning").addEventListener("click", mostrarAviso);
+  // Acessibilidade de teclado para o botão warning
+  const warningIcon = document.getElementById("icon-warning");
+  warningIcon.setAttribute("role", "button");
+  warningIcon.setAttribute("tabindex", "0");
+  warningIcon.setAttribute("aria-label", "Sobre e avisos de atenção");
+  
+  warningIcon.addEventListener("click", mostrarAviso);
+  warningIcon.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      mostrarAviso();
+    }
+  });
 
   function validarCodigo(codigo) {
-
     const resultado = validarBoleto(codigo);
-    /* document.getElementById('status').textContent = resultado.sucesso; */
+    
     document.getElementById('mensagem').textContent = resultado.mensagem;
+    
     if (resultado.tipoCodigoInput == "Código de Barras") {
       document.getElementById('divCodigoBarras').style.display = 'none';
       document.getElementById('divLinhaDigitavel').style.display = 'block';
 
       let mascara;
       if (resultado.linhaDigitavel.length === 47) {
-        // Formato para boletos com dígito verificador
         mascara = resultado.linhaDigitavel.replace(/^(\d{5})(\d{5})(\d{5})(\d{6})(\d{5})(\d{6})(\d{1})(\d{14})$/, '$1.$2 $3.$4 $5.$6 $7 $8');
       } else if (resultado.linhaDigitavel.length === 48) {
-        // Formato para boletos sem dígito verificador
         mascara = resultado.linhaDigitavel.replace(/^(\d{5})(\d{5})(\d{5})(\d{6})(\d{5})(\d{6})(\d{2})(\d{11})$/, '$1.$2 $3.$4 $5.$6 $7 $8');
       } else {
-        // Caso não corresponda aos tamanhos esperados
         mascara = resultado.linhaDigitavel;
       }
 
@@ -77,11 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('codigoBarras').value = mascara;
     }
 
-
     document.getElementById('tipoCodigoInput').value = resultado.tipoCodigoInput;
     document.getElementById('tipoBoleto').value = resultado.tipoBoleto;
-
-
     document.getElementById('vencimento').value = resultado.vencimento;
     document.getElementById('valor').value = resultado.valor;
 
@@ -89,41 +141,26 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById('mensagem').style.display = 'none';
       document.getElementById('result').style.display = 'block';
       document.getElementById('mensagem2').style.display = 'none';
+
+
+
     } else {
       document.getElementById('mensagem').style.display = 'block';
-      mensagem.className = 'message-error message ln';
+      document.getElementById('mensagem').className = 'message-error message ln';
       document.getElementById('result').style.display = 'none';
       document.getElementById('mensagem2').style.display = 'none';
-
     }
 
     const iconContainer = document.getElementById('iconContainer');
-    iconContainer.innerHTML = ''; // Limpa qualquer ícone existente
+    iconContainer.innerHTML = ''; 
 
     const icon = document.createElement('div');
     icon.className = resultado.sucesso ? 'icon-check' : 'icon-error';
     iconContainer.appendChild(icon);
-
-
-    // elementos onde serão exibidas as imegems dos código de barras
-    var imgCodigoBarras = document.getElementById("imgCodigoBarras");
-    var imgLinhaDigitavel = document.getElementById("imgLinhaDigitavel");
-
-    const barCodeParams = {
-      format: "CODE128",
-      displayValue: true,
-      lineColor: "#000",
-      width: 1.5,
-      height: 25,
-      fontSize: 16
-    }
-    JsBarcode(imgCodigoBarras, resultado.codigoBarras, barCodeParams);
-    JsBarcode(imgLinhaDigitavel, resultado.linhaDigitavel, barCodeParams);
   }
 
   function limparResult() {
-    /* document.getElementById('status').textContent = ''; */
-    document.getElementById('mensagem').value = '';
+    document.getElementById('mensagem').textContent = '';
     document.getElementById('tipoCodigoInput').value = '';
     document.getElementById('tipoBoleto').value = '';
     document.getElementById('codigoBarras').value = '';
